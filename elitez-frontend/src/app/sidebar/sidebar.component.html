@@ -1,0 +1,63 @@
+<div class="container">
+  <!-- Sidebar fijo -->
+  <aside class="sidebar">
+    <div class="logo"></div>
+    <nav class="menu">
+      <a href="#" class="menu-item"><i class="bi bi-house"></i></a>
+      <a href="/calendar" class="menu-item"><i class="bi bi-calendar4-week"></i></a>
+      <a href="#" class="menu-item"><i class="bi bi-play-btn"></i></a>
+      <a href="#" class="menu-item"><i class="bi bi-chat-dots"></i></a>
+      <a href="#" class="menu-item"><i class="bi bi-ticket-perforated"></i></a>
+      <a href="#" class="menu-item"><i class="bi bi-gear"></i></a>
+      <a href="#" class="menu-item" (click)="logout()">
+        <i class="bi bi-people"></i>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Contenido principal al lado del sidebar -->
+  <div class="main-content">
+    <div *ngIf="user" class="welcome">
+      <p>Bienvenido, {{ user.username }}!</p>
+    </div>
+
+    <!-- Mostrar el gimnasio seleccionado o todas las tarjetas -->
+    <div class="container">
+      <!-- Si hay un gimnasio seleccionado, mostrar solo ese -->
+      <ng-container *ngIf="selectedGym; else allGyms">
+        <div class="card">
+          <div
+            class="background"
+            [ngStyle]="{ 'background-image': 'url(' + getImagePath(getGymIndex(selectedGym)) + ')' }">
+          </div>
+          <div class="content">
+            <p class="category">Gimnasio</p>
+            <h3 class="heading">{{ selectedGym.name }}</h3>
+            <p>{{ selectedGym.address }}</p>
+            <p>{{ selectedGym.phone }}</p>
+            <button (click)="clearSelectedGym()">Deseleccionar gimnasio</button>
+          </div>
+        </div>
+      </ng-container>
+    
+      <!-- Definición correcta del ng-template -->
+      <ng-template #allGyms>
+        <p *ngIf="gyms.length === 0">Cargando gimnasios...</p>
+        <div *ngFor="let gym of gyms; let i = index" class="card">
+          <div
+            class="background"
+            [ngStyle]="{ 'background-image': 'url(' + getImagePath(i) + ')' }">
+          </div>
+          <div class="content">
+            <p class="category">Gimnasio</p>
+            <h3 class="heading">{{ gym.name }}</h3>
+            <p>{{ gym.address }}</p>
+            <p>{{ gym.phone }}</p>
+            <button (click)="selectGym(gym)">Seleccionar</button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    
+    
+    

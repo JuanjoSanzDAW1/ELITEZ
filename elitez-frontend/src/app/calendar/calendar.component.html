@@ -1,0 +1,104 @@
+<div class="container">
+  <!-- Sidebar fijo -->
+  <aside class="sidebar">
+    <div class="logo" routerLink="/sidebar" style="cursor: pointer;"></div>
+    <nav class="menu">
+      <a routerLink="/sidebar" class="menu-item"><i class="bi bi-house"></i></a>
+      <a routerLink="/calendar" class="menu-item active"><i class="bi bi-calendar4-week"></i></a>
+      <a href="#" class="menu-item"><i class="bi bi-play-btn"></i></a>
+      <a href="#" class="menu-item"><i class="bi bi-chat-dots"></i></a>
+      <a href="#" class="menu-item"><i class="bi bi-ticket-perforated"></i></a>
+      <a href="#" class="menu-item"><i class="bi bi-gear"></i></a>
+      <a href="#" class="menu-item" (click)="logout()"><i class="bi bi-people"></i></a>
+    </nav>
+  </aside>
+
+  <!-- Contenido principal -->
+  <div class="main-content">
+    <h1>Horarios</h1>
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+</div>
+
+<!-- Modal para mostrar eventos y añadir nuevos -->
+<!-- Modal para mostrar eventos y horarios del gimnasio -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventModalLabel">Información para el {{ selectedDate }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- 📌 Mostrar horarios del gimnasio -->
+        <h4>Horarios del Gimnasio</h4>
+        <ul *ngIf="horarios.length > 0; else noHorarios">
+          <li *ngFor="let horario of horarios">
+            <strong>{{ horario.disciplina }}</strong>: {{ horario.hora_inicio }} - {{ horario.hora_fin }}
+          </li>
+        </ul>
+        <ng-template #noHorarios>
+          <p>No hay horarios para este día.</p>
+        </ng-template>
+
+        <hr>
+
+        <!-- 📌 Mostrar eventos programados -->
+        <h4>Eventos Programados</h4>
+        <ul *ngIf="eventos.length > 0; else noEventos">
+          <li *ngFor="let evento of eventos">
+            <strong>{{ evento.titulo }}</strong>: {{ evento.hora_inicio }} - {{ evento.hora_fin }}
+            <button class="btn btn-sm btn-danger" (click)="deleteEvent(evento)">❌</button>
+          </li>
+        </ul>
+        <ng-template #noEventos>
+          <p>No hay eventos programados.</p>
+        </ng-template>
+
+        <hr>
+
+        <!-- 📌 Botón para agregar un nuevo evento -->
+        <button class="btn btn-success w-100 mt-3" (click)="mostrarFormularioEvento = !mostrarFormularioEvento">
+          ➕ Añadir Evento
+        </button>
+
+        <!-- 📌 Formulario para agregar un evento -->
+        <div *ngIf="mostrarFormularioEvento">
+          <hr>
+          <h5>Crear Nuevo Evento</h5>
+          <form>
+            <div class="mb-3">
+              <label class="form-label">Fecha del Evento:</label>
+              <input type="text" class="form-control" [value]="selectedDate" readonly>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nombre del Evento:</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedEvent.titulo" name="titulo">
+            </div>
+
+            <div class="mb-3 d-flex gap-3">
+              <div>
+                <label class="form-label">Hora de Inicio:</label>
+                <p-calendar [(ngModel)]="selectedEvent.hora_inicio" [showTime]="true" [timeOnly]="true"
+                  inputId="start-time" name="hora_inicio"></p-calendar>
+              </div>
+              <div>
+                <label class="form-label">Hora de Fin:</label>
+                <p-calendar [(ngModel)]="selectedEvent.hora_fin" [showTime]="true" [timeOnly]="true" inputId="end-time"
+                  name="hora_fin"></p-calendar>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary w-100 mt-2" (click)="agregarEvento()">Guardar Evento</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

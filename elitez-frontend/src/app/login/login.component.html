@@ -1,0 +1,28 @@
+<div class="background-image"></div>
+<div class="logo"></div>
+
+
+<div class="login-container" [ngClass]="{ 'disabled': showPopup, 'hidden': showPopup }">   
+    <form (submit)="login($event)">
+        <h2>Inicio de Sesión</h2>
+        <input type="text" name="username" placeholder="Usuario" required> 
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <button type="submit">Login</button>
+        <p>¿No tienes una cuenta? <a href="#" (click)="openPopup()">Regístrate aquí</a></p>
+    </form>
+</div>
+
+
+<div class="popup" *ngIf="showPopup">
+    <div class="popup-content">
+        <span class="close" (click)="closePopup()">&times;</span>
+        <h2>Registro</h2>
+        <form (submit)="register($event)">
+            <input type="text" name="username" placeholder="Usuario" required> 
+            <input type="email" name="email" placeholder="Correo Electrónico" required>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <input type="password" name="confirm_password" placeholder="Confirmar Contraseña" required>
+            <button type="submit">Registrarse</button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+<div>
+  <h2>Iniciar Sesión</h2>
+  <form (submit)="login(username, password); $event.preventDefault()">
+    <label for="username">Usuario:</label>
+    <input id="username" type="text" #username required />
+    <br />
+    <label for="password">Contraseña:</label>
+    <input id="password" type="password" #password required />
+    <br />
+    <button type="submit">Entrar</button>
+  </form>
+  <p>{{ messageLogin }}</p>
+</div>
+
+<hr />
+
+<div>
+  <h2>Registro</h2>
+  <form (submit)="register(newUsername, newPassword, email); $event.preventDefault()">
+    <label for="newUsername">Usuario:</label>
+    <input id="newUsername" type="text" #newUsername required />
+    <br />
+    <label for="newPassword">Contraseña:</label>
+    <input id="newPassword" type="password" #newPassword required />
+    <br />
+    <label for="email">Correo Electrónico:</label>
+    <input id="email" type="email" #email required />
+    <br />
+    <button type="submit">Registrarse</button>
+  </form>
+  <p>{{ messageRegister }}</p>
+</div>
