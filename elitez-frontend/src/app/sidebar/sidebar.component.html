@@ -1,19 +1,19 @@
 <div class="container">
   <!-- Sidebar fijo -->
   <aside class="sidebar">
-    <div class="logo"></div>
-    <nav class="menu">
-      <a href="#" class="menu-item"><i class="bi bi-house"></i></a>
-      <a href="/calendar" class="menu-item"><i class="bi bi-calendar4-week"></i></a>
-      <a href="#" class="menu-item"><i class="bi bi-play-btn"></i></a>
-      <a href="#" class="menu-item"><i class="bi bi-chat-dots"></i></a>
-      <a href="#" class="menu-item"><i class="bi bi-ticket-perforated"></i></a>
-      <a href="#" class="menu-item"><i class="bi bi-gear"></i></a>
-      <a href="#" class="menu-item" (click)="logout()">
-        <i class="bi bi-people"></i>
-      </a>
-    </nav>
-  </aside>
+  <div class="logo" routerLink="/sidebar" style="cursor: pointer;"></div>
+  <nav class="menu">
+    <a routerLink="/sidebar" class="menu-item"><i class="bi bi-house"></i></a>
+    <a routerLink="/calendar" class="menu-item"><i class="bi bi-calendar4-week"></i></a>
+    <a routerLink="/videos" class="menu-item"><i class="bi bi-play-btn"></i></a>
+    <a routerLink="/cuotas" class="menu-item active"><i class="bi bi-ticket-perforated"></i></a>
+    <a class="menu-item" routerLink="/ajustes"><i class="bi bi-gear"></i></a>
+    <a class="menu-item" (click)="logout()">
+      <i class="bi bi-box-arrow-left"></i>
+    </a>
+  </nav>
+</aside>
+
 
   <!-- Contenido principal al lado del sidebar -->
   <div class="main-content">

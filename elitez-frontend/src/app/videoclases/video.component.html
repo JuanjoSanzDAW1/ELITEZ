@@ -1,0 +1,63 @@
+<div class="container mt-4" *ngIf="disciplinasUnicas.length > 0">
+  <aside class="sidebar">
+  <div class="logo" routerLink="/sidebar" style="cursor: pointer;"></div>
+  <nav class="menu">
+    <a routerLink="/sidebar" class="menu-item"><i class="bi bi-house"></i></a>
+    <a routerLink="/calendar" class="menu-item"><i class="bi bi-calendar4-week"></i></a>
+    <a routerLink="/videos" class="menu-item"><i class="bi bi-play-btn"></i></a>
+    <a routerLink="/cuotas" class="menu-item active"><i class="bi bi-ticket-perforated"></i></a>
+    <a class="menu-item" routerLink="/ajustes"><i class="bi bi-gear"></i></a>
+    <a class="menu-item" (click)="logout()">
+      <i class="bi bi-box-arrow-left"></i>
+    </a>
+  </nav>
+</aside>
+
+  
+  
+   <div class="main-content"> <!-- AGRÉGALO AQUÍ -->
+    <h2 class="video-title">Videoclases</h2>
+
+  <div class="row g-0">
+    <div class="col-md-3">
+      <div class="list-group" id="videoTabs" role="tablist">
+        <a *ngFor="let disc of disciplinasUnicas"
+           class="list-group-item list-group-item-action"
+           [class.active]="disc === selectedDisciplina"
+           (click)="seleccionarDisciplina(disc)"
+           role="tab">
+          {{ disc }}
+        </a>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+      <div *ngFor="let video of videos">
+        <div *ngIf="video.disciplina === selectedDisciplina" class="tab-pane fade show active mb-4">
+          <h5 class="mb-2">{{ video.titulo }}</h5>
+
+          <!-- YouTube video -->
+          <iframe *ngIf="video.disciplina === selectedDisciplina"
+                  width="100%"
+                  height="470"
+                  [src]="video.embedUrl | safe"
+                  frameborder="0"
+                  allowfullscreen>
+          </iframe>
+
+          <!-- Local or direct video file -->
+          <video *ngIf="!video.isYouTube"
+                 controls
+                 class="w-100 mt-2"
+                 [src]="video.url_video">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div *ngIf="disciplinasUnicas.length === 0" class="mt-4 text-center">
+  <p>No hay videoclases disponibles para este gimnasio.</p>
+</div>

@@ -1,17 +1,19 @@
 <div class="container">
   <!-- Sidebar fijo -->
   <aside class="sidebar">
-    <div class="logo" routerLink="/sidebar" style="cursor: pointer;"></div>
-    <nav class="menu">
-      <a routerLink="/sidebar" class="menu-item"><i class="bi bi-house"></i></a>
-      <a routerLink="/calendar" class="menu-item active"><i class="bi bi-calendar4-week"></i></a>
-      <a href="#" class="menu-item"><i class="bi bi-play-btn"></i></a>
-      <a href="#" class="menu-item"><i class="bi bi-chat-dots"></i></a>
-      <a href="#" class="menu-item"><i class="bi bi-ticket-perforated"></i></a>
-      <a href="#" class="menu-item"><i class="bi bi-gear"></i></a>
-      <a href="#" class="menu-item" (click)="logout()"><i class="bi bi-people"></i></a>
-    </nav>
-  </aside>
+  <div class="logo" routerLink="/sidebar" style="cursor: pointer;"></div>
+  <nav class="menu">
+    <a routerLink="/sidebar" class="menu-item"><i class="bi bi-house"></i></a>
+    <a routerLink="/calendar" class="menu-item"><i class="bi bi-calendar4-week"></i></a>
+    <a routerLink="/videos" class="menu-item"><i class="bi bi-play-btn"></i></a>
+    <a routerLink="/cuotas" class="menu-item active"><i class="bi bi-ticket-perforated"></i></a>
+    <a class="menu-item" routerLink="/ajustes"><i class="bi bi-gear"></i></a>
+    <a class="menu-item" (click)="logout()">
+      <i class="bi bi-box-arrow-left"></i>
+    </a>
+  </nav>
+</aside>
+
 
   <!-- Contenido principal -->
   <div class="main-content">
@@ -49,7 +51,7 @@
         <ul *ngIf="eventos.length > 0; else noEventos">
           <li *ngFor="let evento of eventos">
             <strong>{{ evento.titulo }}</strong>: {{ evento.hora_inicio }} - {{ evento.hora_fin }}
-            <button class="btn btn-sm btn-danger" (click)="deleteEvent(evento)">❌</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteEvent(evento)">X</button>
           </li>
         </ul>
         <ng-template #noEventos>
@@ -60,7 +62,7 @@
 
         <!-- 📌 Botón para agregar un nuevo evento -->
         <button class="btn btn-success w-100 mt-3" (click)="mostrarFormularioEvento = !mostrarFormularioEvento">
-          ➕ Añadir Evento
+          + Añadir Evento
         </button>
 
         <!-- 📌 Formulario para agregar un evento -->

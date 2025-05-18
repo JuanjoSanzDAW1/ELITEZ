@@ -1,0 +1,49 @@
+<aside class="sidebar">
+  <div class="logo" routerLink="/sidebar" style="cursor: pointer;"></div>
+  <nav class="menu">
+    <a routerLink="/sidebar" class="menu-item"><i class="bi bi-house"></i></a>
+    <a routerLink="/calendar" class="menu-item"><i class="bi bi-calendar4-week"></i></a>
+    <a routerLink="/videos" class="menu-item"><i class="bi bi-play-btn"></i></a>
+    <a routerLink="/cuotas" class="menu-item"><i class="bi bi-ticket-perforated"></i></a>
+    <a class="menu-item active" routerLink="/ajustes"><i class="bi bi-gear"></i></a>
+    <a class="menu-item" (click)="logout()"><i class="bi bi-box-arrow-left"></i></a>
+  </nav>
+</aside>
+
+<!-- TÍTULO SEPARADO -->
+<div class="page-title">
+  <p class="fs-1 text-center">Ajustes de Cuenta</p>
+</div>
+
+<!-- CONTENEDOR DEL FORMULARIO CENTRADO -->
+<div class="ajustes-container">
+  <form (ngSubmit)="guardarCambios()" #ajustesForm="ngForm">
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="username" name="username"
+             [(ngModel)]="user.username" [disabled]="!editando" required />
+      <label for="username">Nombre de usuario</label>
+    </div>
+
+    <div class="form-floating mb-3">
+      <input type="email" class="form-control" id="email" name="email"
+             [(ngModel)]="user.email" [disabled]="!editando" required />
+      <label for="email">Correo electrónico</label>
+    </div>
+
+    <div class="form-floating mb-3">
+  <input type="password" class="form-control" id="password" name="password"
+         [value]="'********'" disabled />
+  <label for="password">Contraseña</label>
+</div>
+
+    <div class="d-flex justify-content-between">
+      <button type="button" class="btn btn-warning" (click)="toggleEditar()">
+        {{ editando ? 'Cancelar' : 'Editar' }}
+      </button>
+      <button type="submit" class="btn btn-success" [disabled]="!editando">Guardar cambios</button>
+    </div>
+    <button type="button" class="btn btn-danger mt-4 w-100" (click)="eliminarCuenta()">
+  🗑️ Eliminar cuenta
+</button>
+  </form>
+</div>

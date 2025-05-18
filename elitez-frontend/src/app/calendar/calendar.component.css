@@ -84,5 +84,121 @@ body, html {
     max-width: 600px;
     margin: auto;
   }
-  
-  
+  h1{
+  font-size: 48px;
+  font-family: Impact;
+  }
+  ::ng-deep .fc {
+  background-color: #261c1c;
+  color: #e0e0e0;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+::ng-deep .fc-toolbar-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #e44e4e;
+  text-shadow: 1px 1px 2px #000;
+}
+
+::ng-deep .fc-button {
+  background-color: #e44e4e;
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+::ng-deep .fc-button:hover {
+  background-color: #b53b3b;
+}
+
+::ng-deep .fc-button:disabled {
+  background-color: #fafafa;
+  cursor: not-allowed;
+}
+
+::ng-deep .fc-daygrid-day {
+  background-color: #352525;
+  border: 1px solid #333;
+  transition: background 0.3s ease;
+}
+
+::ng-deep .fc-daygrid-day:hover {
+  background-color: #463030;
+}
+
+::ng-deep .fc-day-today {
+  background-color: #583b3b !important;
+  border: 2px solid #e44e4e;
+}
+
+::ng-deep .fc-event {
+  background-color: #e44e4e;
+  border: none;
+  color: #000;
+  padding: 4px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+}
+
+::ng-deep .fc-col-header-cell {
+  background-color: #422b2b;
+  color: #ffffff;
+  font-weight: bold;
+  padding: 8px 0;
+  border-bottom: 2px solid #ff0000;
+}
+::ng-deep .fc-daygrid-day[data-date$="-14"] .fc-daygrid-day-number {
+  color: rgb(255, 0, 0) !important;
+  font-weight: bold;
+}
+::ng-deep .fc-daygrid-day-number {
+  color: white;
+}
+::ng-deep .fc-col-header-cell-cushion {
+  color: rgb(253, 0, 0);
+}
+
+/* Solo "Sun" (domingo) en rojo */
+::ng-deep .fc-col-header-cell:nth-child(1) .fc-col-header-cell-cushion {
+  color: red !important;
+  font-weight: bold;
+}
+::ng-deep .fc-button {
+  background-color: #d32f2f !important; /* Rojo fuerte */
+  border: none !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+::ng-deep .fc-button:hover {
+  background-color: #b71c1c !important; /* Rojo más oscuro al pasar el ratón */
+}
+::ng-deep .btn-success {
+  background-color: #d32f2f !important;  /* Rojo fuerte */
+  border-color: #d32f2f !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+::ng-deep .btn-success:hover {
+  background-color: #b71c1c !important;  /* Rojo más oscuro al pasar el ratón */
+  border-color: #b71c1c !important;
+}
+::ng-deep .btn-primary {
+  background-color: #d32f2f !important;  /* Rojo fuerte */
+  border-color: #d32f2f !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+::ng-deep .btn-primary:hover {
+  background-color: #b71c1c !important;  /* Rojo más oscuro al pasar el ratón */
+  border-color: #b71c1c !important;
+}

@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgIf, NgFor, CommonModule } from '@angular/common';
 import { GymService } from '../gym/gym.service';
+import { forkJoin } from 'rxjs';
+import { RouterModule } from '@angular/router';
+
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [NgIf, NgFor, CommonModule],
+  imports: [NgIf, NgFor, CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
 })
@@ -18,35 +21,58 @@ export class SidebarComponent implements OnInit {
   constructor(private http: HttpClient, private gymService: GymService) {}
 
   ngOnInit(): void {
-    this.loadUserProfile();
-    this.loadGyms();
-    this.loadSelectedGym();
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('Token no encontrado.');
+    return;
   }
+  // Carga simultánea del perfil del usuario y la lista de gimnasios
+  forkJoin({
+    user: this.http.get('http://localhost:3000/auth/profile', {
+      headers: { Authorization: `Bearer ${token}` }
+    }),
+    gyms: this.gymService.getGyms()
+  }).subscribe({
+    next: ({ user, gyms }: any) => {
+      this.user = user;
+      this.gyms = gyms;
+      console.log('✅ Usuario cargado:', this.user);
+      console.log('✅ Gimnasios cargados:', this.gyms);
 
-  
-  loadUserProfile(): void {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('Token no encontrado.');
-      return;
+      this.loadSelectedGym(); //busca el gym del usuario
+    },
+    error: (error) => {
+      console.error('❌ Error al cargar datos iniciales:', error);
     }
+  });
+}
 
-    this.http
-      .get('http://localhost:3000/auth/profile', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .subscribe({
-        next: (data: any) => {
-          this.user = data;
-          console.log('Usuario cargado:', this.user);
-          this.loadSelectedGym(data.selectedGymId);
-        },
-        error: (error) => {
-          console.error('Error al cargar el perfil del usuario:', error);
-        },
-      });
+  // Cargar perfil de usuario individualmente
+  loadUserProfile(): void {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('Token no encontrado.');
+    return;
   }
 
+  this.http.get('http://localhost:3000/auth/profile', {
+    headers: { Authorization: `Bearer ${token}` },
+  }).subscribe({
+    next: (data: any) => {
+      this.user = data;
+      console.log('Usuario cargado:', this.user);
+
+      this.loadGyms(); // Primero carga los gimnasios
+      setTimeout(() => {
+        this.loadSelectedGym(); 
+      }, 500); 
+    },
+    error: (error) => {
+      console.error('Error al cargar el perfil del usuario:', error);
+    },
+  });
+}
+  // Cargar lista de gimnasios usando el servicio
   loadGyms(): void {
     this.gymService.getGyms().subscribe({
       next: (data) => {
@@ -58,7 +84,7 @@ export class SidebarComponent implements OnInit {
       },
     });
   }
-
+  // Selección de gimnasio por parte del usuario
   selectGym(gym: any): void {
     const token = localStorage.getItem('token');
     
@@ -72,7 +98,7 @@ export class SidebarComponent implements OnInit {
     }).subscribe({
         next: () => {
             this.selectedGym = gym;
-            localStorage.setItem('selectedGymId', gym.id.toString()); // 📌 Guardar en localStorage
+            localStorage.setItem('gymName', gym.name);
             console.log(`✅ Gimnasio seleccionado: ${gym.name}`);
         },
         error: (error) => {
@@ -80,37 +106,42 @@ export class SidebarComponent implements OnInit {
         }
     });
 }
-
   
+
+  // Deseleccionar el gimnasio actual
   clearSelectedGym(): void {
-    this.selectedGym = null;
-    localStorage.removeItem('selectedGym');
-    console.log('Gimnasio deseleccionado.');
+    console.log('🧪 CLICK detectado en botón');
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('❌ Token no encontrado.');
+    return;
   }
-  
-  loadSelectedGym(): void {
-    const storedGymId = localStorage.getItem('selectedGymId');
 
-    if (storedGymId) {
-        // 📌 Buscar el gimnasio en la lista de gimnasios disponibles
-        this.selectedGym = this.gyms.find(gym => gym.id === Number(storedGymId));
-
-        if (!this.selectedGym) {
-            console.warn("⚠️ Gimnasio en localStorage no coincide con la lista de gimnasios.");
-        }
-        return;
+  this.http.post('http://localhost:3000/auth/deselect-gym', {}, {
+    headers: { Authorization: `Bearer ${token}` }
+  }).subscribe({
+    next: () => {
+      this.selectedGym = null;
+      localStorage.removeItem('selectedGymId');
+      console.log('✅ Gimnasio deseleccionado correctamente');
+    },
+    error: (error) => {
+      console.error('❌ Error al deseleccionar gimnasio:', error);
     }
-
-    // 📌 Si no está en localStorage, intentar obtenerlo del usuario en la BD
-    if (this.user && this.user.gym_id) {
-        this.selectedGym = this.gyms.find(gym => gym.id === this.user.gym_id);
-        localStorage.setItem('selectedGymId', this.user.gym_id.toString());
-        console.log("✅ Gimnasio cargado desde el backend:", this.selectedGym);
-    } else {
-        console.warn("⚠️ No se encontró gimnasio seleccionado.");
-    }
+  });
 }
-
+  // Cargar el gimnasio asociado al usuario
+  loadSelectedGym(): void {
+  if (this.user && this.user.gym_id) {
+    this.selectedGym = this.gyms.find(gym => gym.id === this.user.gym_id);
+    if (this.selectedGym) {
+      localStorage.setItem('gymName', this.selectedGym.name); 
+    }
+  } else {
+    console.warn("⚠️ No se encontró gimnasio asociado al usuario.");
+  }
+}
+  // Obtener el índice del gimnasio para mostrar su imagen
   getGymIndex(selectedGym: any): number {
     if (!selectedGym || !this.gyms || this.gyms.length === 0) {
       return 0; // Por defecto, evitar errores
@@ -118,7 +149,7 @@ export class SidebarComponent implements OnInit {
     const index = this.gyms.findIndex(gym => gym.id === selectedGym.id);
     return index !== -1 ? index : 0;
   }
-
+  // Obtener la ruta de la imagen del gimnasio
   getImagePath(index: number): string {
     return `assets/static-images/gym${index + 1}.jpg`;
   }

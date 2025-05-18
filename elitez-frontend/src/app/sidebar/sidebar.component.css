@@ -178,4 +178,8 @@ body, html {
   button:hover {
     background-color: #b71c1c;
   }
-  
+  .welcome{
+  font-weight: bold;
+  font-size: 30px;
+  margin-bottom: 20px;
+  }

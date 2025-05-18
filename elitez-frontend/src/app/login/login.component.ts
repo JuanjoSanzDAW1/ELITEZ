@@ -56,32 +56,40 @@ export class LoginComponent {
 
   
   login(event: Event): void {
-    event.preventDefault();
+  event.preventDefault();
 
-    const form = event.target as HTMLFormElement;
-    const formData = new FormData(form);
+  const form = event.target as HTMLFormElement;
+  const formData = new FormData(form);
 
-    const payload = {
-      username: formData.get('username'), 
-      password: formData.get('password'),
-    };
+  const payload = {
+    username: formData.get('username'),
+    password: formData.get('password'),
+  };
 
-    this.http.post('http://localhost:3000/auth/login', payload).subscribe(
-      (response: any) => {
-        console.log('Inicio de sesión exitoso:', response);
-        alert('Inicio de sesión exitoso');
-        
-        localStorage.setItem('token', response.token);
-        
-        this.router.navigate(['/sidebar']);
-      },
-      (error) => {
-        console.error('Error al iniciar sesión:', error);
-        alert(error.error?.message || 'Error al iniciar sesión. Verifica tus credenciales.');
+  this.http.post('http://localhost:3000/auth/login', payload).subscribe(
+    (response: any) => {
+      console.log('Inicio de sesión exitoso:', response);
+      console.log('📦 selectedGymId recibido del backend:', response.selectedGymId);
+      alert('Inicio de sesión exitoso');
+
+      // ✅ Guarda el token
+      localStorage.setItem('token', response.token);
+
+      // ✅ Guarda el gym_id si viene del backend
+      if (response.selectedGymId) {
+        localStorage.setItem('selectedGymId', response.selectedGymId);
+      } else {
+        localStorage.removeItem('selectedGymId');
       }
-    );
-  }
+
+      this.router.navigate(['/sidebar']);
+    },
+    (error) => {
+      console.error('Error al iniciar sesión:', error);
+      alert(error.error?.message || 'Error al iniciar sesión. Verifica tus credenciales.');
+    }
+  );
 }
 
-
+}
 
